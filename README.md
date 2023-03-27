@@ -15,3 +15,5 @@ probably 1000 lines I did write were time consuming). I had plans for the struct
 categories done, but again I didn't have time. 
 Also, thanks again for the extension. I know I didn't do great on this module, but I would have 
 done so much worse without the extension. I'll just have to slay on the next module. 
+Small additional note: for the validator, a TA told me that doing <label name="x"></label> was
+fine, so are those validator errors still considered errors?
