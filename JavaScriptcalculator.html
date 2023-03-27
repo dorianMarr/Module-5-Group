@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+<meta charset="utf-8"/>
+<title>Calculator</title>
+</head>
+<body>
+<div id="header">
+<p>Calculator</p>
+</div>
+<form name="calculator">
+    <p>
+      <input type="text" name="firstNumber" id="firstNumber" placeholder="Enter first number">
+      <label for="firstNumber">First Number:</label> 
+    </p>
+    <p>
+      <input type="text" name="secondNumber" id="secondNumber" placeholder="Enter second number">
+      <label for="secondNumber">Second Number:</label>
+    </p>
+    <p>
+      <input type="radio" name="operation" value="Add" id="addinput" /> <label for="addinput">Add</label>
+      <input type="radio" name="operation" value="Subtract" id="subinput" /> <label for="subinput">Subtract</label>
+      <input type="radio" name="operation" value="Multiply" id="multinput" /> <label for="multinput">Multiply</label>
+      <input type="radio" name="operation" value="Divide" id="divinput" /> <label for="divinput">Divide</label>
+    </p>
+</form>
+<p>
+  <div id="answer">Answer: No answer yet, finish inputting information!</div>
+</p>
+<script>
+    function checkForm(){
+      let firstNumber=null;
+      let secondNumber=null;
+      let operation=null;
+      if(document.calculator.firstNumber.value!=null)
+      {
+        firstNumber=Number(document.calculator.firstNumber.value);
+      }
+      if(document.calculator.firstNumber.value!=null)
+      {
+        secondNumber=Number(document.calculator.secondNumber.value);
+      }
+      for(i=0; i<document.getElementsByName("operation").length;i++)
+      {
+        if(document.getElementsByName("operation")[i].checked)
+        {
+          operation=document.getElementsByName("operation")[i].value;
+        }
+      }
+      if(firstNumber!=null && secondNumber != null && operation !=null)
+      {
+        calculate(firstNumber, secondNumber, operation)
+        return true;
+      }
+      return false;
+	  }
+
+    //calculate and display the answer after the user has input enough information. 
+    function calculate(firstNum, secNum, operation){
+      let answer=null;
+      if(operation=="Add")
+      {
+        answer=firstNum+secNum;
+      }
+      else if (operation=="Subtract")
+      {
+        answer=firstNum-secNum;
+      }
+      else if (operation=="Multiply")
+      {
+        answer=firstNum*secNum;
+      }
+      else if(operation=="Divide")
+      {
+        if(secNum==0)
+        {
+          alert("Alert: Dividing by Zero");
+          document.getElementById("answer").innerHTML=("Answer: Undefined");
+
+        }
+        else
+        {
+          answer=firstNum/secNum;
+        }
+      }
+      if(answer!=null)
+      {
+        document.getElementById("answer").innerHTML=("Answer: "+String(answer));
+      }
+    }
+
+    document.getElementById("firstNumber").addEventListener("change", checkForm, false);
+    document.getElementById("secondNumber").addEventListener("change", checkForm, false);
+    document.getElementsByName("operation")[0].addEventListener("click", checkForm, false);
+    document.getElementsByName("operation")[1].addEventListener("click", checkForm, false);
+    document.getElementsByName("operation")[2].addEventListener("click", checkForm, false);
+    document.getElementsByName("operation")[3].addEventListener("click", checkForm, false);
+
+</script>
+</body>
+</html>

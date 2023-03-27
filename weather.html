@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" type="text/css" href="https://classes.engineering.wustl.edu/cse330/content/weather.css" />    
+<title>Weather</title>
+</head>
+<body>
+<div id="header">
+<p>Weather</p>
+</div>
+<button type="button" id="reset">Refresh Weather!</button>
+<div class="weather" id="weatherWidget">
+	<div class="weather-loc">
+        <strong><label id="city"></label></strong>
+        <label id="state"></label>
+    </div>
+	<div class="weather-humidity">
+        <label id="humidity"></label>
+    </div>
+    <div class="weather-temp">
+        <label id="temp"></label>
+    </div>	
+    <img class="weather-tomorrow" />
+        <label for="weather-tommorow" id="tomPic"></label>
+	<img class="weather-dayaftertomorrow" />
+        <label for="weather-dayaftertomorrow" id="dayafterPic"></label>
+
+</div>
+<script>
+    function fetchWeather()
+    {
+        //I got the next 4 lines from https://www.w3schools.com/xml/ajax_xmlhttprequest_send.asp 
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET","https://classes.engineering.wustl.edu/cse330/content/weather_json.php",false)
+        xhttp.send(); 
+        let weatherText=xhttp.responseText;
+
+        const city = document.getElementById("city");
+        let cityRegex=/"city":"[\w. ^\d]{1,}"/;
+        let cityString=cityRegex.exec(weatherText)[0].substring(8,cityRegex.exec(weatherText)[0].length-1);
+        city.innerHTML=cityString;
+
+        const state=document.getElementById("state");
+        let stateRegex=/"state":"[\w ^\d]{1,}"/;
+        let stateString=stateRegex.exec(weatherText)[0].substring(9,stateRegex.exec(weatherText)[0].length-1);
+        state.innerHTML=stateString;
+
+        const humidity=document.getElementById("humidity");
+        let humidityRegex=/"humidity":\d{1,2}/;
+        let humidityString=humidityRegex.exec(weatherText)[0].substring(11);
+        humidity.innerHTML=humidityString;
+
+        const temp=document.getElementById("temp");
+        let tempRegex=/"temp":"\d{1,3}/;
+        let tempString=tempRegex.exec(weatherText)[0].substring(8);
+        tempString+="\u00b0F";
+        temp.innerHTML=tempString;
+
+        let tomRegex=/"tomorrow":{"code":"\d{1,2}/;
+        let tomString=tomRegex.exec(weatherText)[0].substring(20);
+        let tomPic=document.getElementById("tomPic");
+        let url="http://us.yimg.com/i/us/nws/weather/gr/"+String(tomString)+"ds.png";
+        tomPic.src=url;
+        tomPic.innerHTML="<img src=\"" + url +"\">";
+
+        let dayafterRegex=/"dayafter":{"code":"\d{1,2}/;
+        let dayafterString=dayafterRegex.exec(weatherText)[0].substring(20);
+        let dayafterPic=document.getElementById("dayafterPic");
+        let url2="http://us.yimg.com/i/us/nws/weather/gr/"+String(dayafterString)+"ds.png";
+        dayafterPic.src=url2;
+        dayafterPic.innerHTML="<img src=\"" + url2 +"\">";
+
+
+
+    }
+
+
+    document.addEventListener("DOMContentLoaded", fetchWeather, false);
+    document.getElementById("reset").addEventListener("click", fetchWeather, false);
+</script>
+
+</body>
+</html>

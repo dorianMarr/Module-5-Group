@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<script src ="calendarHelp.js"></script>
+<link rel="stylesheet" type="text/css" href="calendar.css" />
+<title>Cool Calendar</title>
+</head>
+<body>
+<div id="header">
+<p>Cool Calendar</p>
+</div>
+<p><label id="user">User: Guest</label></p>
+Log In: 
+<form name="LogIn">
+  <label for="username">Username:</label> 
+      <input type="text" name="username" id="username" placeholder="Enter username">
+      <label for="password">Password:</label>
+      <input type="text" name="password" id="password" placeholder="Enter password">
+      <input type="submit" value="Log In" id="submitButton">
+</form>
+<p><label id="loginMessage"></label></p>
+Register: 
+<form name="Register">
+  <label for="newUsername">New Username:</label> 
+    <input type="text" name="newUsername" id="newUsername" placeholder="Enter username">
+    <label for="newPassword">New Password:</label>
+    <input type="text" name="newPassword" id="newPassword" placeholder="Enter password">
+    <input type="submit" value="Register" id="submitButton2">
+</form>
+<label id="test"></label>
+
+<div id="Calendar">
+  <strong><label id="year">Year: 2023</label></strong><br>
+  <strong><label id="month">Month: March</label></strong><br>
+  <button type="button" id="prevMonth">Previous Month</button>
+  <button type="button" id="nextMonth">Next Month</button>
+  <br><br>
+  <table>
+    <tr>
+      <th>Sun</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+      <th>Sat</th>
+    </tr>
+    <tr>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+    </tr>
+    <tr>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+    </tr>
+    <tr>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+    </tr>
+    <tr>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+    </tr>
+    <tr>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+    </tr>
+    <tr>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+        <td><strong><label name="day"></label></strong><br><label class="events"></label></td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  //global vars
+  let loggedIn=false;
+  let username=null;
+  let currentMonth=new Month(2023,2);
+  let firstDayIndex=-1; //will represent the first index that is a day in currentMonth
+  let lastDayIndex=-1; //will represent the last index that is a day in currentMonth
+
+  //----------------Functions:-------------------------
+  function checkLogin()
+  {
+    let loginUsername=null;
+    let password=null;
+    if(document.LogIn.username.value!=null)
+    {
+      loginUsername=document.LogIn.username.value;
+    }
+    if(document.LogIn.password.value!=null)
+    {
+      password=document.LogIn.password.value;
+    }
+    if(password!=null && loginUsername != null)
+    {
+      login(loginUsername, password);
+      return true;
+    }
+    return false; 
+  }
+  //checks that the information that the user tried to register with was logical
+function checkRegistration()
+{
+  let newUsername=null;
+  let newPassword=null;
+  if(document.Register.newUsername.value!=null)
+  {
+    newUsername=document.Register.newUsername.value;
+  }
+  if(document.Register.newPassword.value!=null)
+  {
+    newPassword=document.Register.newPassword.value;
+  }
+  if(password!=null && username != null)
+  {
+    register(newUsername, newPassword);
+    return true;
+  }
+  return false; 
+}
+//logs in the user
+function login(thisUsername, password)
+{
+    /*
+  I got a lot of help from these websites while I was still struggling with understanding it, 
+  so this entire function has sone of pieces from these websites, though of course I filled
+  it with information relevant to me
+  the websites:
+  https://www.geeksforgeeks.org/javascript-fetch-method/
+  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  */
+  let user = { 
+    "name": thisUsername, 
+    "password": password 
+  };
+
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(user)
+  };
+  fetch("loginValidate.php", options).then(response =>
+      response.json()).then(result => {
+        if(result.login=="success")
+        {
+          username=thisUsername;
+          loggedIn=true;
+          document.getElementById("loginMessage").innerHTML="Successful Login. Thank you!";
+          document.getElementById("user").innerHTML="User: "+username;
+        }
+        else
+        {
+          document.getElementById("loginMessage").innerHTML="Login Failed, please try again.";
+          document.LogIn.username.value=null;
+          document.LogIn.password.value=null;
+        }
+      })
+      .catch((error) => {
+    console.error("Error:", error);
+  });
+}
+function register(newUsername, password)
+{
+  let user = { 
+    "username" : newUsername ,
+    "password" : password
+  };
+
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(user)
+  };
+  fetch("calendarRegistration.php", options)
+    .then(response =>response.json())
+    .then(data => {
+      loggedIn=true;
+      username=newUsername;
+      document.getElementById("loginMessage").innerHTML="Successful registration, thank you so much for joining!";
+      document.getElementById("user").innerHTML="User: "+username;
+      }
+    )
+    .catch((error) => {
+    console.error("Error:", error);
+    });
+}
+function updateCalendar()
+{
+  document.getElementById("year").innerHTML="Year: " + String(currentMonth.year);
+  document.getElementById("month").innerHTML="Month: " + getMonthString(currentMonth.month);
+  let index=0; //the index of the array of all the elements that have the name day that we're changing the date of
+  //reset all of the days
+  for(w=0;w<document.getElementsByName("day").length;w++)
+  {
+    document.getElementsByName("day")[w].innerHTML="";
+  }
+  index=0;
+  //set all of the days to the correct date
+  for(i=0;i<currentMonth.getWeeks().length;i++)
+  {
+    let thisWeek=currentMonth.getWeeks()[i];
+    for(j=0;j<thisWeek.getDates().length;j++)
+    {
+      let today=thisWeek.getDates()[j];
+      if(i==0 && today.getDate()>7)
+      {
+        index++;
+        //some of last month is at the beginning of the first week of this month, we should ignore these days.
+        continue;
+      }
+      if (i==(currentMonth.getWeeks().length-1)&&today.getDate()<7)
+      {
+        //the last week of the month contains some of the beginning of next month, we should ignore the rest 
+        //of the days in the last week of the month
+        lastDayIndex=index-1;
+        break;
+      }
+      if(today.getDate()==1)
+      {
+        firstDayIndex=index;
+      }
+      document.getElementsByName("day")[index].innerHTML=String(today.getDate());
+      index++;
+    }
+  }
+  /* 
+  Gives all of the days in the calendar the option to click them and get the popup to add an event
+  I got the HTML in the for loop from https://www.w3schools.com/howto/howto_js_popup.asp
+  */
+  if(loggedIn==true)
+  {
+    for(w=0;w<document.getElementsByName("day").length;w++)
+    {
+      if(w<=lastDayIndex && w>=firstDayIndex)
+      {
+        document.getElementsByName("day")[w].innerHTML+="<div class=\"popup\"><span class=\"popuptext\">Add Event</span></div>";
+      }
+    }
+    readEvents(username);
+  }
+}
+//retunr the string for that month number
+function getMonthString(monthNum)
+{
+  let monthString="January";
+  switch (monthNum)
+  {
+    case 0:
+      monthString="January";
+      break;
+    case 1:
+      monthString="February";
+      break;
+    case 2:
+      monthString="March";
+      break;
+    case 3:
+      monthString="April";
+      break;
+    case 4: 
+      monthString="May";
+      break;
+    case 5: 
+      monthString="June";
+      break;
+    case 6: 
+      monthString="July";
+      break;
+    case 7: 
+      monthString="August";
+      break;
+    case 8: 
+      monthString="September";
+      break;
+    case 9: 
+      monthString="October";
+      break;
+    case 10: 
+      monthString="November";
+      break;
+    case 11: 
+      monthString="December";
+      break;
+  }
+  return monthString;
+}
+  /*
+  I got most of this function from 
+  https://www.w3schools.com/howto/howto_js_popup.asp
+  updates the popup at popupIndex
+  */
+function updatePopup(popupIndex)
+{
+  //the string that will represent the innerHTML for the cool popup 
+  let innerString="New Event: <br>";
+  innerString+="<form name=\"addEvent\">";
+  innerString+="<input type=\"text\" name=\"eventName\" id=\"eventName"+String(popupIndex)+"\" placeholder=\"Enter the event name:\"><br>";
+  innerString+="<input type=\"text\" name=\"startTime\" id=\"startTime"+String(popupIndex)+"\" placeholder=\"Enter the start time:\"><br>";
+  innerString+="<input type=\"submit\" name=\"eventSubmit\" value=\"Submit\">"
+  innerString+="</form>";
+  let popupText=document.getElementsByClassName("popuptext");
+  if(popupText!=null && popupIndex<popupText.length-1)
+  {
+    popupText[popupIndex].innerHTML+=innerString;
+  }
+  let submitButton=document.getElementsByName("eventSubmit");
+  if(submitButton!=null&& submitButton.length>0)
+  {
+    submitButton[0].indexParam=popupIndex; //gives the submitButton info so that we can access the index later on. got idea for this line from https://stackoverflow.com/questions/256754/how-to-pass-arguments-to-addeventlistener-listener-function
+  }
+}
+/*
+finish this when you get to doing categories
+function getTags()
+{
+
+}
+*/
+function checkAddEvent(coolEvent)
+{
+  let timeRegex=/\d{1,2}:\d{1,2}/;
+  let eventName, eventTime;
+  let eventIndex=coolEvent.currentTarget.indexParam; //got idea for this line from https://stackoverflow.com/questions/256754/how-to-pass-arguments-to-addeventlistener-listener-function
+  eventName=document.addEvent.eventName.value;
+  eventTime=document.addEvent.startTime.value;
+
+  //get the event date
+  let date=eventIndex-firstDayIndex+1;
+  let fullDate=getMonthString(currentMonth.month)+"/"+String(date)+"/"+currentMonth.year;
+
+  if(eventTime!=null && eventName!=null)
+  {
+    let eventTime=timeRegex.match(eventTime);
+    if(eventTime!=null)
+    {
+      addEvent(eventName,eventTime[0],fullDate);
+      popup.classList.toggle("show");
+      //updatePopup(eventIndex); //might be correcter?
+    }
+  }
+}
+function addEvent(eventName,eventTime,dateString)
+{
+  let event = { 
+    "event_name": eventName, 
+    "event_time": eventTime,
+    "event_date" : dateString,
+    "username" : username 
+  };
+
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(event)
+  };
+  fetch("addEvent.php", options)
+    .then(response =>response.json())
+    .then(data => {
+      console.log(data);
+      readEvents();
+      })
+    .catch((error) => {
+    console.error("Error:", error);
+  });
+}
+//checks if obj is iterable. I got this function from https://stackoverflow.com/questions/18884249/checking-whether-something-is-iterable
+function isIterable(obj) {
+  // checks for null and undefined
+  if (obj == null) {
+    return false;
+  }
+  return typeof obj[Symbol.iterator] === 'function';
+}
+//read all of the events in the table for this user
+function readEvents()
+{
+  //gets all the info for the events that the user directly owns 
+  let user = { 
+    "username" : username 
+  };
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(user)
+  };
+  let count=0;
+  const allEvents=[];
+  fetch("getEvents.php", options)
+    .then(response =>response.json())
+    .then(data => {
+        console.log(data);
+        if(isIterable(data) && data[0]!=0)
+        {
+          for(funEvent of data)
+          {
+            allEvents[count]={
+              event_name : funEvent.event_name, 
+              ownerUsername : funEvent.username,
+              start_time : funEvent.start_time,
+              date : funEvent.event_date,
+              event_id : funEvent.event_id
+            };
+            count++;
+          }
+          displayCalendarEvents(allEvents);
+          getSharedEvents();
+        }
+      }
+    )
+    .catch((error) => {
+    console.error("Error:", error);
+    });
+}
+//get all of the events shared with the user
+function getSharedEvents()
+{
+    //gets all the info for the events that have been shared with the current user
+    let user = { 
+    "username" : username 
+  };
+
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(user)
+  };
+  let count=0;
+  const allSharedEvents=[];
+  fetch("getSharedEvents.php", options)
+    .then(response =>response.json())
+    .then(data => {
+      console.log(data);
+        if(isIterable(data)&& data[0]!=0)
+        {
+          for(funEvent of data.events)
+          {
+            allEvents[count]={
+              event_name : funEvent.event_name, 
+              ownerUsername : funEvent.username,
+              start_time : funEvent.start_time,
+              date : funEvent.event_date,
+              event_id : funEvent.event_id
+            };
+            count++;
+            console.log(data);
+          }
+          displayCalendarEvents(allSharedEvents);
+        }
+      }
+    )
+    .catch((error) => {
+    console.error("Error:", error);
+    });
+}
+//display all of the events in the parameter
+function displayCalendarEvents(calendarEvents)
+{
+  if(typeof(calendarEvents)!="object")
+  {
+    return -1;
+  }
+  
+  for (singleEvent of calendarEvents)
+  {
+    let dayIndex=singleEvent.date.substring(singleEvent.date.indexOf("/")+1);
+    dayIndex=dayIndex.substring(0,dayIndex.indexOf("/"));
+    dayIndex=Number(dayIndex)+firstDayIndex-1;
+    let month=substring(0,singleEvent.date.indexOf("/"));
+    if (month != getMonthString(currentMonth)) //we only want to display events that are in the current month
+    {
+      continue;
+    }
+    let year=singleEvent.date.substring(singleEvent.year.length-4);
+    if(year != currentMonth.year)
+    {
+      continue; //we only want to dispkay events that are in the current month AND the current year
+    }
+    let dayArray=document.getElementsByName("day");
+    if (dayArray != null && dayArray.lenght>dayIndex)//shouldn't be necessary but want to be sure
+    {
+      //makes a button that represents the event
+      dayArray[dayIndex].innerHTML+="<div class = \"popup2\"> <span class= \"popuptext2\" <button type=\"button\" class=\"eventButton\">"+String(singleEvent.event_name)+"</button> </span> </div>";
+    }
+  }
+  let eventButtons=document.getElementsByClassName("eventButton");
+  if(eventButtons!=null)
+  {
+    for(e=0;e<eventButtons.length;e++)//there's an eventButton for every popuptext2 so this should be fine
+    {
+      eventButtons[e].indexParam=e; //same as the other indexParam stuff
+      eventButtons[e].eventInfo=singleEvent;
+      eventButtons[e].addEventListener("click",function(event){
+        updatePopup2(event);
+        let thisPopup=document.getElementsByClassName("popuptext2");
+        if(thisPopup!=null)
+        {
+          //the index of the eventButton will be the same as the index of the popuptext2 because there'sone popuptext2 for each eventButton
+          thisPopup[e].classList.toggle("show");
+        }
+      },false); 
+    }
+  }
+}
+//updates the popups for the events that have already been added
+function updatePopup2(funEventTime)
+{
+  let popupIndex=funEventTime.currentTarget.indexParam; //same as other indexParam stuff
+  let thisEvent=funEventTime.currentTarget.eventInfo;
+  //the string that will represent the innerHTML for the cool popup 
+  let innerString="Event Name: "+thisEvent.event_name+ "<br>";
+  innerString+="Start Time: " + thisEvent.event_time+"<br>";
+  innerString+="Event Date: " +thisEvent.date+"<br>";
+  innerString+="Event Owner: " + thisEvent.ownerUsername+"<br>";
+  innerString+="<button type=\"button\" class=\"deleteEvent\">Delete this Event</button><br>";
+
+  let allPopuptext2=document.getElementsByClassName("popuptext2");
+  if(allPopuptext2!=null)
+  {
+    allPopuptext2[popupIndex].innerHTML+=innerString;
+  }
+  let deleteButton=document.getElementsByClassName("deleteEvent");
+  if(deleteButton!=null)
+  {
+    deleteButton.addEventListener("click",deleteButton,false);
+  }
+
+  innerString="<button type=\"button\" class=\"editButton\">Edit this Event</button><br>";
+  let allPopuptext2two=document.getElementsByClassName("popuptext2");
+  if(allPopuptext2two!=null)
+  {
+    allPopuptext2two[popupIndex].innerHTML+=innerString;
+  }
+  let editButton=document.getElementsByClassName("editButton");
+  if(editButton!=null)
+  {
+    editButton.addEventListener("click",editButton,false); 
+  }
+  
+  innerString="<form name=\"share\"><input type=\"text\" name=\"shareUsername\" placeholder=\"Enter the event name:\"><br>";
+  innerString+="<button type=\"button\" class=\"shareButton\">Share this Event</button><br></form>";
+  let allPopuptext2three=document.getElementsByClassName("popuptext2");
+  if(allPopuptext2three!=null)
+  {
+    allPopuptext2three[popupIndex].innerHTML+=innerString;
+  }
+  let shareButton=document.getElementsByClassName("shareButton");
+  if(shareButton!=null)
+  {
+    shareButton.eventInfo=thisEvent;
+    shareButton.addEventListener("click",shareButton,false); 
+  }
+}
+//will share the event associated with this button with another user
+function shareButton(getShared){
+  let thisEvent=getShared.currentTarget.eventInfo;
+  let sharedUsername=document.share.shareUsername.value; //double check this maybe
+
+  //do the fetch request to actually share the event
+  let event = { 
+    "event_id": thisEvent.event_id, 
+    "new_user_id" : sharedUsername
+  };
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(event)
+  };
+  fetch("shareEvent.php", options)
+    .then(response =>response.json())
+    .then(data => {
+      console.log(data);
+      })
+    .catch((error) => {
+    console.error("Error:", error);
+  });
+}
+//will delete the event associated with this button using the event associated with the button
+function deleteButton(sadEvent) 
+{
+  let getDeleted=sadEvent.currentTarget.eventInfo;
+  if(getDeleted==null)
+  {
+    return; //can't do anything if we don't have an event to delete lol
+  }
+
+  //do the fetch request to actually delete the event
+  let event = { 
+    "event_id": getDeleted.event_id, 
+    "username" : getDeleted.ownerUsername 
+  };
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(event)
+  };
+  fetch("deleteEvent.php", options)
+    .then(response =>response.json())
+    .then(data => {
+      console.log(data);
+      })
+    .catch((error) => {
+    console.error("Error:", error);
+  });
+}
+// give the user the form so that they can edit the event
+function editButton(coolEvent) 
+{
+  let getEdited=coolEvent.currentTarget.eventInfo;
+  let index=coolEvent.currentTarget.indexParam; 
+  
+  if(getEdited==null)
+  {
+    return; //can't do anything if we don't have an event to edit lol
+  }
+  updatePopup(index); //want to show the form so that we can get the edited info
+  //popup.classList.toggle("show"); //not 100% sure if I need this 
+  let eventObject=document.getElementsByClassName("eventSubmit");
+  if(eventObject!=null)
+  {
+    eventObject.eventInfo=getEdited;
+    eventObject.addEventListener("click",checkEditEvent,false);
+  }
+}
+//Check to see that the input that the user gave us is reasonable
+function checkEditEvent(editEvent) // ADD STUFF TO CHECK THAT THIS IS THE ORIGINAL USER
+{
+  let timeRegex=/\d{1,2}:\d{1,2}/;
+  let eventName, eventTime;
+  let eventIndex=editEvent.currentTarget.indexParam; //got idea for this line from https://stackoverflow.com/questions/256754/how-to-pass-arguments-to-addeventlistener-listener-function
+  eventName=document.addEvent.eventName.value; //the form name will be the same as adding the event but that should be fine
+  eventTime=document.addEvent.startTime.value;
+
+  //get the event date
+  let date=eventIndex-firstDayIndex+1;
+  let fullDate=getMonthString(currentMonth.month)+"/"+String(date)+"/"+currentMonth.year;
+
+  if(eventTime!=null && eventName!=null)
+  {
+    let eventTime=timeRegex.match(eventTime);
+    if(eventTime!=null)
+    {
+      if(username==editEvent.currentTarget.eventInfo){ //the current user is the owner of the event
+        let newEvent={
+              event_name : eventName, 
+              ownerUsername : username,
+              start_time : eventTime,
+              date : fullDate,
+              event_id : editEvent.currentTarget.eventInfo.event_id
+            };
+        finishEditEvent(newEvent);
+        updatePopup(eventIndex);
+      }
+    }
+  }
+}
+//actually do the fetch request to edit the event
+function finishEditEvent(newEventInfo)
+{
+  //do the fetch request to actually edit the event
+  let options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 
+              'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(newEventInfo)
+  };
+  fetch("editEvent.php", options)
+    .then(response =>response.json())
+    .then(data => {
+      console.log(data);//do stuff after you edit the event
+      })
+    .catch((error) => {
+    console.error("Error:", error);
+  });
+}
+
+updateCalendar();
+
+//----------------EVENT LISTENERS---------------------
+// submitting login info
+document.getElementById("submitButton").addEventListener("click", checkLogin, false);
+document.getElementById("submitButton2").addEventListener("click", checkRegistration, false);
+
+// previous or next month
+document.getElementById("prevMonth").addEventListener("click",function(event){
+  currentMonth=currentMonth.prevMonth();
+  updateCalendar();
+},false);
+document.getElementById("nextMonth").addEventListener("click",function(event){
+  currentMonth=currentMonth.nextMonth();
+  updateCalendar();
+},false);
+
+for(j=0;j<document.getElementsByClassName("popup").length;j++)
+{
+  let popup = document.getElementsByClassName("popup")[j];
+  if(popup!=null)
+  {
+    popup.indexParam=j;
+    popup.addEventListener("click",function(event){
+      updatePopup(j);
+      popup.classList.toggle("show");
+    },false);
+  }
+}
+
+let submitButton=document.getElementsByName("eventSubmit");
+if(submitButton.value != null)
+{
+  //presumably only one day clicked on at a time. even if not, the user just has to finish with 
+  //the first pop-up before doing stuff with the other one. 
+  submitButton[0].addEventListener("click", checkAddEvent,false);
+}
+
+</script>
+</body>
+</html>
